@@ -35,6 +35,7 @@ target 'bikesafetyapp' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
   pod 'react-native-location', :path => '../node_modules/react-native-location/react-native-location.podspec'
+  pod 'react-native-geolocation', path: '../node_modules/@react-native-community/geolocation'
 
   target 'bikesafetyappTests' do
     inherit! :search_paths
