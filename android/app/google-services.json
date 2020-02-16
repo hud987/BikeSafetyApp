@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "302952989263",
+    "firebase_url": "https://bike-safety-1579109044880.firebaseio.com",
+    "project_id": "bike-safety-1579109044880",
+    "storage_bucket": "bike-safety-1579109044880.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:302952989263:android:b8e78f15b47275a7ba603a",
+        "android_client_info": {
+          "package_name": "com.bikesafetyapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "302952989263-o9l1u6cckpv7qq92c05807b97d9t55l1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAiU4qNzIZYQCYtWMOAboH33u5TgMMAAAY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "302952989263-o9l1u6cckpv7qq92c05807b97d9t55l1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -5,24 +5,28 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   StyleSheet,
-  Button
+  TextInput,
 } from "react-native";
+import { Button} from 'native-base';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import RNLocation from 'react-native-location';
 import Geolocation from 'react-native-geolocation-service';
 import Polyline from '@mapbox/polyline'
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 export default class BikerOrDriver extends React.Component {
   state = {
     ready: false,
-    lat: null,
-    lng: null,
+    lat: 37.78825, //null,
+    lng: -122.4324, //null,
     speed: 0,
     heading: 0,
     error: null,
     desLat: 37.885874,
-    desLng: -122.506447
-
+    desLng: -122.506447,
+    desPlace_Id: null,
+    destination: "",
+    predictions: [],
   }
 
   componentDidMount() {
@@ -45,12 +49,12 @@ export default class BikerOrDriver extends React.Component {
     }).then(granted => {
         if (granted) {
           this.locationSubscription = RNLocation.subscribeToLocationUpdates(locations => {
-            console.log('locations')
             console.log('location')
+            console.log(locations)
             this.setState({
               lat: locations[0].latitude,
               lng: locations[0].longitude
-            }, this.mergeCoords)
+            }, )//this.mergeCoords)
         })
       }
     })  
@@ -90,7 +94,29 @@ export default class BikerOrDriver extends React.Component {
     }
   }
 
-  async getDirections(startLoc, desLoc) {
+  async getDirections() {
+    console.log('get directions')
+    if (this.state.desPlace_Id==null) {
+      console.log('enter a dest')
+      return
+    }
+    try {
+      const resp = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${this.state.desPlace_Id}&fields=geometry&key=AIzaSyAQ6JZnM-5sMY9Za63OUKE2fNvRQy_h9CY`)
+      const json = await resp.json()
+      console.log('current coords');
+      console.log(this.state.lat);
+      console.log(this.state.lng);
+      this.getDirectionsTwo(`${this.state.lat}, ${this.state.lng}`,`${json.result.geometry.location.lat}, ${json.result.geometry.location.lng}`)
+      this.setState({
+        desLat: json.result.geometry.location.lat,
+        desLng: json.result.geometry.location.lng,
+      })
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async getDirectionsTwo(startLoc, desLoc) {
     console.log('getting directions')
     try {
       const resp = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${desLoc}&key=AIzaSyAQ6JZnM-5sMY9Za63OUKE2fNvRQy_h9CY`)
@@ -104,38 +130,115 @@ export default class BikerOrDriver extends React.Component {
         }
       })
       
-      this.setState({ coords },console.log(this.state.coords))
+      this.setState({ coords })
     } catch(error) {
       console.log('error: ' + error)
     }
   }
 
+  async onChangeDestination(destination) {
+    this.setState({ destination });
+    const apiKey = "AIzaSyAQ6JZnM-5sMY9Za63OUKE2fNvRQy_h9CY";
+    const apiUrl = `https://maps.googleapis.com/maps/api/place/autocomplete/json?key=${apiKey}&input=${destination}&location=${this.state.lat}, ${this.state.lng}&radius=2000`;
+    try {
+      const result = await fetch(apiUrl);
+      const json = await result.json();
+      //console.log(json);
+      this.setState({
+        predictions: json.predictions
+      })
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  onSetDestination = prediction => {
+    console.log(prediction.place_id)
+    this.setState({ 
+      destination: prediction.description,
+      desPlace_Id: prediction.place_id,
+      predictions: [],
+    });
+  }
+
   render() {
+    
+    const predictions = this.state.predictions.map(prediction => {
+      if (this.state.destination != prediction.description) {
+        return (
+        <Text 
+          style={styles.suggestions}
+          onPress={()=>this.onSetDestination(prediction)} 
+          key={prediction.id}
+        >
+          {prediction.description}
+        </Text>
+        )}
+    });
+
     return(
-      <MapView
-        showsUserLocation
-        style={styles.screen}
-        provider={PROVIDER_GOOGLE}
-        initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-      >
-        <MapView.Polyline 
-          strokeWidth = {2}
-          strokeColor = {'red'}
-          coordinates = {this.state.coords}
-        />
-      </MapView>
+      <View style={styles.screen}>
+        <MapView
+          showsUserLocation
+          provider={PROVIDER_GOOGLE}
+          style={styles.screen}
+          initialRegion={{
+            latitude: 37.78825,
+            longitude: -122.4324,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        >
+          <MapView.Polyline 
+            strokeWidth = {2}
+            strokeColor = {'red'}
+            coordinates = {this.state.coords}
+          />
+        </MapView>
+        <View style={styles.mapInput}>
+          <TextInput style={styles.destinationInput}placeholder="Enter destination..." value={this.state.destination} onChangeText={destination => this.onChangeDestination(destination)} />
+          <Button 
+            full
+            style={styles.directionsButton} 
+            onPress={() => this.getDirections()}>
+            <Text>-></Text>
+          </Button> 
+        </View>
+        {predictions}
+
+      </View>
     );
   }
 };
 
 const styles = StyleSheet.create({
   screen: {
-    flex: 1,
+    ...StyleSheet.absoluteFillObject
     //backgroundColor: 'blue'
   },
+  destinationInput: {
+    marginTop: 10,
+    marginLeft: 10,
+    flex: 1,
+    height: 40,
+    backgroundColor: 'white',
+    padding:6,
+  },
+  suggestions: {
+    backgroundColor: "white",
+    padding: 6,
+    fontSize: 18,
+    marginHorizontal: 10,
+    marginRight: 60,
+  },
+  directionsButton: {
+    height: 40,
+    width: 50,
+    marginRight: 10,
+    padding: 6,
+    marginTop: 10,
+  },
+  mapInput: {
+    flexDirection: "row",
+  }
 });

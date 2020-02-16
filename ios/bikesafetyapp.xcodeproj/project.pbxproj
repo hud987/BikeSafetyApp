@@ -20,6 +20,7 @@
 		A0A73EF749B7AC5F5B6A9B0B /* libPods-bikesafetyapp-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7939224AF24BED1ABC7AB20 /* libPods-bikesafetyapp-tvOSTests.a */; };
 		EA36D930A2F91EA83EDA4CA1 /* libPods-bikesafetyapp-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AB78AC93FB88C3835F0BA41B /* libPods-bikesafetyapp-tvOS.a */; };
 		EB75FE8D6C5178B461024B70 /* libPods-bikesafetyapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EE4AE161936372C713081EE /* libPods-bikesafetyapp.a */; };
+		FBC5A46D23F89587000E499D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FBC5A46C23F89586000E499D /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +68,7 @@
 		CD2B61926E7ECA16429D8E47 /* libPods-bikesafetyappTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-bikesafetyappTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		FBC5A46C23F89586000E499D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,7 +150,6 @@
 				847A11095A2174F2A0085DFE /* Pods-bikesafetyappTests.debug.xcconfig */,
 				732234E10C3BA77CB89B9EB8 /* Pods-bikesafetyappTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -175,6 +176,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				FBC5A46C23F89586000E499D /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* bikesafetyapp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* bikesafetyappTests */,
@@ -309,6 +311,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -339,6 +342,7 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				FBC5A46D23F89587000E499D /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
